@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+  <!-- <form name="form" id="form"> -->
+             <!-- <input type="text" id="name" placeholder="Your name"> -->
+
+    <h3>Send a email from this site to anyone!</h3>
+
+    <input type="text" id="email" placeholder="recipient email">
+    <input type="text" id="msg"  placeholder="message" >
+  <!-- </form> -->
+  <!-- <input value="send" type="button" onclick="go()"> -->
+  <button type="button" id="button" <!--onclick="go()"-->>sende</button>
+  <div id="sendingsbekreftelse"></div>
+    <script>
+
+    //  ajax med POST metode bra for store filer og mer sensetiv informasdjon som passord og meldinger i midt tilfelle
+        document.getElementById("button").addEventListener("click", function go(){
+            // var textValue = document.getElementById("name").value;
+            var email = document.getElementById("email").value;
+            var msg = document.getElementById("msg").value;
+            // console.log(text);
+            // let myForm = document.getElementById('form');
+            // let formData = new FormData(myForm);
+
+            var xmlSend = new XMLHttpRequest();
+            xmlSend.open("POST", "emailsender.php", true);
+            var params = "email=" + email + "&msg=" + msg; // her setter jeg navn og value på objektet som jeg sender over og henter med $ _POST[""] i php
+            xmlSend.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xmlSend.onreadystatechange = function () {
+                   if(this.readyState == 4 && this.status == 200){
+                        document.getElementById("sendingsbekreftelse").innerHTML = "Du sendte epost med beskjed " + this.responseText;
+                }
+            }
+             // xmlSend.send();
+
+            xmlSend.send(params);
+        });
+
+
+
+
+    </script>
+
+</body>
+</html>

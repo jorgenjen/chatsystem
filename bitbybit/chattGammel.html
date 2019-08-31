@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="chattGammel.css">
+    <title></title>
+  </head>
+  <body>
+     <div id="chat-box">
+       <div id="chat-msgs">
+
+
+         <!-- <div class="msg-wrapper"> -->
+         <span class="msg msg-rep">melding fra en client som er kjempe lang mo hahahahahahaahahh sdfsdf sdfs sdf sdfsd sdfsdf sdf sdf sdfsd sdfsd sdf sdfsdf sdf sdf </span>
+         <!-- </div> -->
+         <!-- <div class="msg-wrapper"> -->
+         <span  class="msg msg-user">melding fra admin0 endring</span>
+         <span class="msg msg-rep">melding fra en client som er kjempe lang mo hahahahahahaahahh sdfsdf sdfs sdf sdfsd sdfsdf sdf sdf sdfsd sdfsd sdf sdfsdf sdf sdf </span>
+         <span  class="msg msg-user">melding fra admin0 endring</span>
+
+         <!-- </div> -->
+         <!-- <span class="msg-wrapper">
+         <span class="msg msg-rep">melding fra en client som er kjempe lang mo hahahahahahaahahh sdfsdf sdfs sdf sdfsd sdfsdf sdf sdf sdfsd sdfsd sdf sdfsdf sdf sdf </span>
+       </span> -->
+       <!-- <span class="msg-wrapper">
+       <span  class="msg msg-user">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span>
+     </span> -->
+       </div>
+       <input type="text" id="chat-field" placeholder="Enter a message...">
+       <button type="button" onclick="sendVerify('btn')" id="chat-button">Send</button> <br><br><br>
+
+       <div id="sendingsbekreftelse">
+
+       </div>
+     </div>
+
+
+     <script type="text/javascript">
+          var chatBox = document.getElementById("chat-field");
+
+          chatBox.addEventListener("keyup", sendVerify);
+
+
+          function sendVerify(e){
+            if (e.keyCode === 13) {
+               console.log("du klikket enter i meg " + e);
+               sendEmailVerify();
+            }
+            else if (e === "btn") {
+              console.log("du klikket sendt knappen " + e);
+              sendEmailVerify();
+            }
+          }
+
+          function sendEmailVerify(){
+            if ( document.cookie.match(/^(.*;)?\s*firstMsg\s*=\s*[^;]+(.*)?$/) == null) { // sjekker om cookie eksisterer
+              console.log("cookie is not set settin it now yas!!");
+              var d = new Date();
+              d.setTime(d.getTime() + (2*60*60*1000));
+              var expires = "expires="+ d.toUTCString();
+              document.cookie = "firstMsg=" + true + ";" + expires + ";path=/";
+              send("true")
+            }
+            else {
+              console.log("cookie is set yay!!!!");
+              send("false");
+            }
+          }
+
+          function send(z){
+             // console.log(chatBox.value);
+             // if (z) {
+             //   console.log("send email");
+             // }
+             // else {
+             //   console.log("don't send email");
+             // }
+             let xmlSend;
+             if (window.XMLHttpRequest) {
+                // code for modern browsers
+                xmlSend = new XMLHttpRequest();
+             }
+             else {
+                // code for old IE browsers
+                xmlSend = new ActiveXObject("Microsoft.XMLHTTP");
+             }
+
+             // var xmlSend = new XMLHttpRequest();
+             xmlSend.open("POST", "msgsender.php", true);
+             var params = "semail=" + z + "&msg=" + chatBox.value; // her setter jeg navn og value på objektet som jeg sender over og henter med $ _POST[""] i php
+             console.log(params);
+             xmlSend.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+             xmlSend.onreadystatechange = function () {
+                if(this.readyState == 4 && this.status == 200){
+                     document.getElementById("sendingsbekreftelse").innerHTML = this.responseText;
+               }
+             }
+              // xmlSend.send();
+
+              xmlSend.send(params);
+          }
+
+         // setInterval(fuction(){
+         //       // bør muligens sette en boolean slik at jeg kan pause denne under andree ajax request om det forårsaker bugs bare set
+         //       // if(cango){her er koden under } slik ant andre funksjoner kan endre på dette parameteret og bestemme  om den skal kjøre eller ei
+         //       console.log("NU GÅR EG!!");
+         //       var chatNumber = 4;
+         //       var xmlUpdateFinder = new XMLHttpRequest();
+         //        xmlUpdateFinder.open("GET", "chatupdater.php?=chatnr=" + chatNumber, true); // kan sende chat if over her vet å bytte utl og legge til nummer parameter aka chatid om jeg kun ønsker å se chatt kunde står i kanskje lurt å ikke oppdatere for alle chats som den gjør nå
+         //        xmlUpdateFinder.onreadystatechange = function () {
+         //           if(this.readyState == 4 && this.status == 200){
+         //                document.getElementById("sendingsbekreftelse").innerHTML = this.responseText;
+         //          }
+         //        }
+         //
+         //       xmlUpdateFinder.send();
+         //
+         //
+         //  }, 1000);
+
+
+         setInterval(function(){
+           // console.log("THIS GOES BEFORE CHECH");
+           if (!(document.cookie.match(/^(.*;)?\s*firstMsg\s*=\s*[^;]+(.*)?$/) == null)) { // kjører bare om det er sendt første msg
+
+           console.log("NU GÅR EG!!");
+               var chatNumber = 18;
+               let xmlUpdateFinder;
+               if (window.XMLHttpRequest) {
+                  // code for modern browsers
+                  xmlUpdateFinder = new XMLHttpRequest();
+               }
+               else {
+                  // code for old IE browsers
+                  xmlUpdateFinder = new ActiveXObject("Microsoft.XMLHTTP");
+               }
+                xmlUpdateFinder.open("GET", "chatupdater.php?chatnr=" + chatNumber, true); // kan sende chat if over her vet å bytte utl og legge til nummer parameter aka chatid om jeg kun ønsker å se chatt kunde står i kanskje lurt å ikke oppdatere for alle chats som den gjør nå
+                xmlUpdateFinder.onreadystatechange = function () {
+                   if(this.readyState == 4 && this.status == 200){
+                        // var nyeMeld = JSON.parse(this.responseText); // her henter jeg inn jasjon fra servers echo
+                        // document.getElementById("sendingsbekreftelse").innerHTML += nyeMeld[0].message; // her henter jeg ut verdi fra json objectet jeg fikk fra server
+                        document.getElementById("sendingsbekreftelse").innerHTML = this.responseText; // her henter jeg ut verdi fra json objectet jeg fikk fra server
+                  }
+                }
+                xmlUpdateFinder.send();
+              }
+       }, 5000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     </script>
+  </body>
+</html>

@@ -1,0 +1,60 @@
+#chat-box{
+  margin-left: auto;
+  margin-right: auto;
+  width: 50vw;
+}
+
+
+#chat-msgs{
+ width: 50vw;
+ height: 60vh;
+ overflow-y: scroll;
+}
+
+.msg{
+  border-radius: 2vh;
+  padding: 0.4rem;
+  width: 85%;
+  display: block;
+  /* padding: 10px; */
+  color: #fff;
+  font-size: 1.2rem;
+  display: block;
+  border-bottom: 0.2vh:
+}
+
+.msg-user{
+  float: right;
+  background-color: lightgreen;
+}
+.msg-rep{
+  /* margin-bottom: 1vh; */
+  background-color: lightblue;
+}
+.msg-wrapper{
+  width: 100%;
+  /* display: block; */
+  margin-bottom: 0.4rem;
+  height: auto;
+}
+#chat-field{
+  width: 35vw;
+  padding-bottom: 5vh;
+  overflow-x: inherit;
+}
+/* #chat-msgs span{
+  width: 100%;
+  display: block;
+  padding: 0;
+  border: 0;
+} */
+
+
+
+
+
+
+
+
+
+/* bottom */

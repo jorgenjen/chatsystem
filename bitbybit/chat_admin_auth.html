@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8mb4">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>chat</title>
+    <link rel="stylesheet" href="chat_admin_auth.css">
+  </head>
+  <body>
+    <div id="input-box-wrapper">
+      <div id="input-box">
+        <img src="logo/logoutkast2v2.png">
+        <!-- <h3>Velkommen</h3>
+        <h5>Venligst log inn</h5> -->
+       <form action="admin_chat_loggin_checker.php" method="post">
+          <input type="text" name="ident" placeholder="Ident...">
+          <input type="password" name="password" placeholder="Password...">
+          <!-- <input type="password" name="passwordverify" placeholder="Repeat password..."> -->
+          <input id="sub" type="submit" value="Logg inn">
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

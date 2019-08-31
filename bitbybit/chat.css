@@ -1,0 +1,381 @@
+*{
+ margin: 0;
+ border: 0;
+ padding: 0;
+}
+#sendingsbekreftelse{
+  max-width: 60vw;
+}
+
+.chat-wrap{
+  display: none;
+  position: fixed;
+  margin-left: 73vw;
+  width: 25vw;
+  height: 77vh; /* husk å fjerne høyden nedenfor senere */
+  margin-top: 10vh;
+  /* display: flex; */
+  flex-direction: column;
+  border-radius: 2rem 2rem 0rem 2rem;
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+}
+/* chat top */
+.chat-header{
+  height: 15%;
+  width: 100%;
+  background-color: #eee;
+  /* border-bottom: 0.8px solid rgba(147, 147, 147, 0.26); */
+  filter: drop-shadow(0 0 0.08rem rgba(147, 147, 147, 0.26));
+}
+
+.chat-header h1{
+  text-align: center;
+  vertical-align: middle;
+  font-size: 2.5rem;
+  margin-top: 4%;
+}
+/* chat middle */
+.chat-messages{
+  height: 60%;
+  width: 100%;
+  background-color: #eee;;
+  /* display: flex;
+  flex-wrap: wrap; */
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+
+/* chat msg styles */
+
+
+
+/* .chat {
+width: 30vw;
+border: solid 0.3rem #EEE;
+display: flex;
+flex-direction: column;
+padding: 10px;
+} */
+
+.messages {
+margin-top: 20px;
+display: flex;
+flex-direction: column;
+}
+.user{
+  padding-right: 20px;
+}
+
+.message {
+border-radius: 20px 20px 20px 0;
+padding: 8px 15px;
+margin-top: 5px;
+margin-bottom: 5px;
+display: inline-block;
+color: #fff;
+}
+.admin { /*endret på fra user*/
+  padding-left: 20px;
+  align-items: flex-start;
+}
+
+.admin .message { /*endret på fra user*/
+margin-right: 20%;
+background-color: #E27D60;
+position: relative;
+}
+
+.user {
+align-items: flex-end;
+}
+
+.user .message {
+color: white;
+margin-left: 25%;
+/* background: linear-gradient(to bottom, #00D0EA 0%, #0085D1 100%); */
+background-attachment: fixed;
+position: relative;
+border-radius:  20px 20px 0 20px;
+background-color: #c38D9E;
+}
+
+/* chat bottom */
+.chat-send{
+  height: 25%;
+  width: 100%;
+  background: #eee;
+  /* filter: drop-shadow(0 0 -0.08rem rgba(147, 147, 147, 0.26)); */
+
+}
+#msg-input{
+  box-sizing: border-box;
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+  width: 70%;
+  margin-left: 20px;
+  margin-top: 20px;
+  /* padding: 8px 20px; */
+  padding: 8px 20px;
+  padding-left: 25px;
+  border: 1.35px solid #c38D9E;
+  padding-left: 0.5vw;
+  border-radius: 20px 20px 0 20px;
+  background-color: #eee;
+  /* transition: border-width .2s, margin-top .2s, margin-left .2s; */
+  /* IDEA tror det ser bedre ut uten transition faktisk */
+  position: static;
+  resize: none;
+
+}
+#msg-input:focus{
+  /* margin-top: -5rem; */
+  outline: none;
+  border-width: 2.5px;
+  margin-left: 19px;
+  /* transition: border-width .2s, margin-top .2s,  margin-left .2s; */
+  /* IDEA tror det ser bedre ut uten transition faktisk */
+  position: absolute;
+}
+
+#send-btn{
+  height: 30%;
+  background-color: #c38D9E;
+  color: #fff;
+  border-radius: 10px 10px 10px 10px;
+  cursor: pointer;
+  margin-top: 32px;
+  float: right;
+  margin-right: 20px;
+}
+#send-btn:focus{
+  outline: none;
+
+}
+#send-btn:hover{
+  filter: grayscale(20%);
+}
+/* #msg-input::-webkit-input-placeholder {
+  border: 0;
+  padding: 7px 15px;
+
+  margin: 0;
+}
+#msg-input::-moz-placeholder {
+  border: 0;
+  padding: 7px 15px;
+
+  margin: 0;
+}
+#msg-input:-ms-input-placeholder {
+  border: 0;
+  padding: 7px 15px;
+
+  margin: 0;
+}
+#msg-input:-moz-placeholder {
+  border: 0;
+  padding: 7px 15px;
+
+  margin: 0;
+} */
+
+/* chat buble styele */
+
+
+
+#toggle-wrap{
+  float: right;
+  margin-right: 20px;
+  background-color: indigo;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  margin-right: 20px;
+
+}
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: .15vw;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(56px);
+  -ms-transform: translateX(56px);
+  transform: translateX(56px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+
+
+
+
+#chat-bubble{
+  width: 4vw;
+  height: 4vw;
+  border-radius: 50%;
+  background-color: #E27D60;
+  position: fixed;
+  margin-left: 94vw;
+  cursor: pointer;
+}
+
+#bot-input{
+  border-radius: 0.2rem;
+  background-color: #eee;
+  padding-left: .1rem;
+
+}
+#bot-input:focus{
+  outline: none;
+}
+
+
+.chat-yes,
+.chat-no{
+  display: block;
+  background-color: #AFAFAF;
+  color: #eee;
+  padding: 0.1rem;
+  font-size: 0.8rem;
+  width: 1rem;
+  float: right;
+  cursor: pointer;
+}
+.chat-yes{
+  border-radius: 5px 1px 1px 1px;
+  margin-right: 5px;
+}
+.chat-no{
+  border-radius: 1px 5px 1px 1px;
+}
+
+.chat-ja:hover,
+.chat-nei:hover{
+  opacity: 0.9;
+}
+
+
+
+
+
+/* slutt ny kod */
+
+
+
+
+
+
+
+
+
+
+
+
+/* #chat-box{
+  margin-left: auto;
+  margin-right: auto;
+  width: 50vw;
+}
+
+
+#chat-msgs{
+ width: 50vw;
+ height: 60vh;
+ overflow-y: scroll;
+}
+
+.msg{
+  border-radius: 2vh;
+  padding: 0.4rem;
+  width: 85%;
+  display: block;
+  color: #fff;
+  font-size: 1.2rem;
+  display: block;
+  border-bottom: 0.2vh:
+}
+
+.msg-user{
+  float: right;
+  background-color: lightgreen;
+}
+.msg-rep{
+  background-color: lightblue;
+}
+.msg-wrapper{
+  width: 100%;
+  margin-bottom: 0.4rem;
+  height: auto;
+}
+#chat-field{
+  width: 35vw;
+  padding-bottom: 5vh;
+  overflow-x: inherit;
+} */
+/* #chat-msgs span{
+  width: 100%;
+  display: block;
+  padding: 0;
+  border: 0;
+} */
+
+
+
+
+
+
+
+
+
+/* bottom */

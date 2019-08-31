@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="chat.css">
+    <title></title>
+  </head>
+  <body>
+
+
+
+      <div class="chat-wrap">
+        <div class="chat-header">
+          <h1>Jorgen</h1>
+        </div>
+
+        <div class="chat-messages">
+                                                                              <!-- IDEA HAR MELDINGER SOM KOMMER INN  DYNAMISK SÅ TRENGER IKKE PER NÅ placeholderS
+
+                                                                               <div class="admin messages">
+                                                                                <div class="message">
+                                                                                  Dude
+                                                                                 </div>
+                                                                              </div>
+                                                                              <div class="user messages">
+                                                                                <div class="message">
+                                                                                  Hey!
+                                                                                </div>
+                                                                                <div class="message">
+                                                                                  You there?
+                                                                                </div>
+                                                                                <div class="message">
+                                                                                  Hello, how's it going? Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                                                                </div>
+                                                                              </div>
+                                                                              <div class="admin messages">
+                                                                                <div class="message">
+                                                                                  Great thanks! yor so great can I have an applke Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                                                                </div>
+                                                                                <div class="message">
+                                                                                  How about you?
+                                                                                 </div>
+                                                                              </div> -->
+
+        </div>
+        <div class="chat-send">
+          <textarea id="msg-input" placeholder="craft a message..."></textarea>    <!-- rows="8" cols="80" -->
+
+          <button type="button" id="send-btn" onclick="sendVerify('btn')">SEND</button>
+          <div id="toggle-wrap">
+            <span>send with enter</span>
+
+
+
+
+
+
+
+            <!-- var komentert skal være det <label class="switch">
+              <input type="checkbox">
+              <span class="slider round"></span>
+            </label> -->
+
+
+          </div>
+        </div>
+      </div>
+      <div id="chat-bubble">
+
+      </div>
+
+
+
+<div id="sendingsbekreftelse">
+
+</div>
+
+
+     <script type="text/javascript">
+     var lastAdmin; // GJØR DENNE GLOBAL SLIK AT DEN SOM HENEER INN NYE MELDINGER OGSÅ VET OM DET ER ADMIN SIST ELLER IKKE SLIK AT DEN KAN STYLE RETT ETTER DET MED SAMME PRINTRMETODE SOM I DENNE
+      // selcv om den står her blir den undefined etter den er satt til true i getMsgs() men i chatupdater() som går på chat intervall blir den undefined for some resason
+
+          var input = document.getElementById("msg-input");
+
+          input.addEventListener("keyup", sendVerify);
+
+
+          function sendVerify(e){
+            if (e.keyCode === 13) {
+               console.log("du klikket enter i meg " + e);
+               sendEmailVerify();
+            }
+            else if (e === "btn") {
+              console.log("du klikket sendt knappen " + e);
+              sendEmailVerify();
+            }
+          }
+
+          function sendEmailVerify(){
+            if ( document.cookie.match(/^(.*;)?\s*firstMsg\s*=\s*[^;]+(.*)?$/) == null) { // sjekker om cookie eksisterer
+              console.log("cookie is not set settin it now yas!!");
+              var d = new Date();
+              d.setTime(d.getTime() + (2*60*60*1000));
+              var expires = "expires="+ d.toUTCString();
+              document.cookie = "firstMsg=" + true + ";" + expires + ";path=/";
+              send("true")
+            }
+            else {
+              console.log("cookie is set yay!!!!");
+              send("false");
+            }
+          }
+
+          function send(z){
+            console.log("input value = " + input.value);
+            if (input.value == "update email") {
+              botReply("Here you go fill inn your email in the field below <br><br><input id='bot-input' type='text' placeholder='email...'><br><br> you can allways try again later by typing 'update email in the field below.'");
+            }
+             // console.log(chatBox.value);
+             // if (z) {
+             //   console.log("send email");
+             // }
+             // else {
+             //   console.log("don't send email");
+             // }
+             let xmlSend;
+             if (window.XMLHttpRequest) {
+                // code for modern browsers
+                xmlSend = new XMLHttpRequest();
+             }
+             else {
+                // code for old IE browsers
+                xmlSend = new ActiveXObject("Microsoft.XMLHTTP");
+             }
+
+             // var xmlSend = new XMLHttpRequest();
+             xmlSend.open("POST", "msgsender.php", true);
+             var params = "semail=" + z + "&msg=" + input.value; // her setter jeg navn og value på objektet som jeg sender over og henter med $ _POST[""] i php
+             console.log(params);
+             xmlSend.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                             // IDEA her printer jeg slik at meldingen kommer i meldingsfeltet
+
+
+
+                               let chatMsgs = document.getElementsByClassName("chat-messages")[0];
+
+                               // document.getElementById("sendingsbekreftelse").innerHTML += "brukar<br><br>";
+                               if (lastAdmin) {
+                                 chatMsgs.innerHTML += '<div class="user messages"><div class="message">' + input.value + '</div></div>';
+                                 lastAdmin = false; // trenger kun å settes her da om denne iokke kjørrer i denne if er den false fra før av
+                               }
+                               else {
+                                 chatMsgs.lastChild.innerHTML += '<div class="message">' + input.value + '</div>';
+                               }
+
+                               chatMsgs.scrollTop = chatMsgs.scrollHeight;
+                               input.value = "";
+
+
+
+             xmlSend.onreadystatechange = function () {
+                if(this.readyState == 4 && this.status == 200){
+                  if ( document.cookie.match(/^(.*;)?\s*email\s*=\s*[^;]+(.*)?$/) == null) { // sjekker om cookie eksisterer
+                    var d = new Date();
+                    d.setTime(d.getTime() + (30*24*60*60*1000));
+                    var expires = "expires="+ d.toUTCString();
+                    document.cookie = "email=" + true + ";" + expires + ";path=/";
+                    send("true")
+                    botReply("Your message have been sendt to Jorgen he will give you an anwser in a few hours! leave your email in the field below so you can check the anwser here and in your email inbox. <br><br><input id='bot-input' type='text' placeholder='email...'><br><br> If you wrote the email wrongly send 'update email' in this chat and a opportunity to change it will appear!"); // onfocus='emailUpdater'
+                    setEvt();
+                    document.getElementById("sendingsbekreftelse").innerHTML = this.responseText;
+                  }
+
+               }
+             }
+              // xmlSend.send();
+              xmlSend.send(params);
+          }
+
+
+
+
+
+
+          function botReply(e){
+
+            let chatMsgs = document.getElementsByClassName("chat-messages")[0];
+
+            if (lastAdmin) {
+              document.getElementById("sendingsbekreftelse").innerHTML += "<br><br>da skal denne kjøre siden lastAdmin er jo: " + lastAdmin + "...";
+              chatMsgs.lastChild.innerHTML += '<div class="message">' + e + '</div>';
+              // msgStruct += '<div class="message">' + newMsg[i].message + '</div>';
+            }
+            else {
+              // document.getElementById("sendingsbekreftelse").innerHTML += "brukar<br><br>";
+
+              lastAdmin = true;
+               chatMsgs.innerHTML += '<div class="admin messages"><div class="message">' + e + '</div></div>';
+
+
+               }
+               chatMsgs.scrollTop = chatMsgs.scrollHeight;
+
+          }
+
+        function setEvt(){
+          var botInput = document.getElementById("bot-input");
+          let chatMsgs = document.getElementsByClassName("chat-messages")[0];
+
+
+          botInput.addEventListener("keyup", enterVerify);
+          function enterVerify(e){
+            if (e.keyCode == 13) {
+              console.log("enter fungerer naa");
+              emailupdater();
+            }
+          }
+          botInput.addEventListener("focusout", emailUpdater);
+          function emailUpdater(){
+            botInput.disabled = true;
+
+            console.log("nokkje SKJEDDE HER NA");
+            let xmlSend;
+            if (window.XMLHttpRequest) {
+              // code for modern browsers
+              xmlSend = new XMLHttpRequest();
+            }
+            else {
+              // code for old IE browsers
+              xmlSend = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlSend.open("POST", "emailupdater.php", true);
+            console.log("input: " + this.value);
+            var params = "email=" + botInput.value; // her setter jeg navn og value på objektet som jeg sender over og henter med $ _POST[""] i php
+            xmlSend.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xmlSend.onreadystatechange = function () {
+              if(this.readyState == 4 && this.status == 200){
+
+                botReply("Awsome! you will now recive jorgen's reply on " + this.responseText + ". In addition to rigth here on this site!");
+
+                // chatMsgs.innerHTML += '<p class="chat-no">no</p> <p class="chat-yes">yes</p>'
+                chatMsgs.scrollTop = chatMsgs.scrollHeight;
+
+              }
+            }
+
+            xmlSend.send(params);
+
+          }
+
+        }
+
+
+
+          //
+          // var botInput = document.getElementById("bot-input");
+
+         // setInterval(function(){
+         //       // bør muligens sette en boolean slik at jeg kan pause denne under andree ajax request om det forårsaker bugs bare set
+         //       // if(cango){her er koden under } slik ant andre funksjoner kan endre på dette parameteret og bestemme  om den skal kjøre eller ei
+         //       console.log("NU GÅR EG!!");
+         //       var chatNumber = 4;
+         //       var xmlUpdateFinder = new XMLHttpRequest();
+         //        xmlUpdateFinder.open("GET", "chatupdater.php?=chatnr=" + chatNumber, true); // kan sende chat if over her vet å bytte utl og legge til nummer parameter aka chatid om jeg kun ønsker å se chatt kunde står i kanskje lurt å ikke oppdatere for alle chats som den gjør nå
+         //        xmlUpdateFinder.onreadystatechange = function () {
+         //           if(this.readyState == 4 && this.status == 200){
+         //                document.getElementById("sendingsbekreftelse").innerHTML = this.responseText;
+         //          }
+         //        }
+         //
+         //       xmlUpdateFinder.send();
+         //
+         //
+         //  }, 1000);
+
+// IDEA denne rett under skal ut av komentering over skal ikke det
+
+document.getElementsByClassName("chat-messages")[0].onscroll = function(){
+ // console.log("scrollTOP: " + Math.floor(document.getElementsByClassName("chat-messages")[0].scrollTop)); // Math.floor(
+  // console.log("scrollBottom: " + document.getElementsByClassName("chat-messages")[0].scrollBottom);
+  // console.log("scrollHeight " + document.getElementsByClassName("chat-messages")[0].scrollHeight);
+  // console.log("scrollHeight " + (document.getElementsByClassName("chat-messages")[0].scrollHeight - document.getElementsByClassName("chat-messages")[0].offsetHeight));
+
+}
+
+      setTimeout(function(){
+        setInterval(function(){
+          // console.log("THIS GOES BEFORE CHECK");
+          // IDEA DETTE ER IKKE EN IDDEEL LØSNING SIDEN OM BRUKER SENDER MELDING GÅR VEKK OG KOMMER TILBAKE TO TIMER ETTER OG VENTER I FANAN FUNGERER IKKE LIVE UPDATINGEN
+          if (!(document.cookie.match(/^(.*;)?\s*firstMsg\s*=\s*[^;]+(.*)?$/) == null)) { // kjører bare om det er sendt første msg
+
+            // console.log("NU GÅR EG!!");
+            // var chatNumber = 23; // IDEA denne må komme inn DYNAMISK
+            let xmlUpdateFinder;
+            if (window.XMLHttpRequest) {
+              // code for modern browsers
+              xmlUpdateFinder = new XMLHttpRequest();
+            }
+            else {
+              // code for old IE browsers
+              xmlUpdateFinder = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlUpdateFinder.open("GET", "chatupdater.php", true); // kan sende chat if over her vet å bytte utl og legge til nummer parameter aka chatid om jeg kun ønsker å se chatt kunde står i kanskje lurt å ikke oppdatere for alle chats som den gjør nå
+            xmlUpdateFinder.onreadystatechange = function () {
+              if(this.readyState == 4 && this.status == 200){
+
+
+
+                // console.log("eg går nu iallefall");
+                // let nyeMeld = JSON.parse(this.responseText); // her henter jeg inn jasjon fra servers echo
+                // document.getElementById("sendingsbekreftelse").innerHTML = "meldID " + nyeMeld[2].msgid + "  message in this chat: " + nyeMeld[2].message;
+                // for (var i = 0; i < nyeMeld.length; i++) {
+                //   document.getElementById("sendingsbekreftelse").innerHTML += nyeMeld[i].msgid + "    mellom her    " + nyeMeld[i].message ;
+                // }
+
+                // her henter jeg ut verdi fra json objectet jeg fikk fra server
+
+
+
+                // document.getElementById("sendingsbekreftelse").innerHTML = this.responseText;
+                if (this.responseText != "") {
+
+                  // document.getElementById("sendingsbekreftelse").innerHTML += "her er last ADMIN ID SOM KOMMER DIREKTE FRA LIVE UPDATE " + lastAdmin; // HVORFOR ER DENNE UNDEFINED???
+
+
+                            // document.getElementById("sendingsbekreftelse").innerHTML += "<br><br>last admin er: " + lastAdmin + " burde ha vært true; responsen er " + this.responseText;
+                            // document.getElementById("sendingsbekreftelse").innerHTML += "<br><br><br><br>" + chatMsgs.lastChild;
+                            let newMsg = JSON.parse(this.responseText);
+                            let chatMsgs = document.getElementsByClassName("chat-messages")[0];
+
+                            let offset = Math.floor(chatMsgs.scrollHeight - chatMsgs.offsetHeight) - Math.floor(chatMsgs.scrollTop);
+
+                            let msgStruct = "";
+
+
+                            for (var i = 0; i < newMsg.length; i++) {
+                              // document.getElementById("sendingsbekreftelse").innerHTML += "brukar<br><br>";
+                              // if (chatMsgs.scrollTop == chatMsgs.scrollHeight) {
+                              //   console.log("This is true!!!!");
+                              // }
+
+
+                              if (newMsg[i].admin == 0) {
+
+
+
+
+                                if (lastAdmin) {
+                                  chatMsgs.innerHTML += '<div class="user messages"><div class="message">' + newMsg[i].message + '</div></div>';
+                                  lastAdmin = false; // trenger kun å settes her da om denne iokke kjørrer i denne if er den false fra før av
+                                }
+                                else {
+                                  chatMsgs.lastChild.innerHTML += '<div class="message">' + newMsg[i].message + '</div>';
+                                }
+                              }
+                              else {
+                                if (lastAdmin) {
+                                  document.getElementById("sendingsbekreftelse").innerHTML += "<br><br>da skal denne kjøre siden lastAdmin er jo: " + lastAdmin + "...";
+                                  chatMsgs.lastChild.innerHTML += '<div class="message">' + newMsg[i].message + '</div>';
+                                  // msgStruct += '<div class="message">' + newMsg[i].message + '</div>';
+                                }
+                                else {
+                                  // document.getElementById("sendingsbekreftelse").innerHTML += "brukar<br><br>";
+
+                                  lastAdmin = true;
+                                   chatMsgs.innerHTML += '<div class="admin messages"><div class="message">' + newMsg[i].message + '</div></div>';
+
+
+                                   }
+
+                                }
+                                // document.getElementById("sendingsbekreftelse").innerHTML += "admin<br><br>";
+                              }
+                              // document.getElementById("sendingsbekreftelse").innerHTML += " dette er diffen: " + offset;
+                             if (offset < 31) {
+                               chatMsgs.scrollTop = chatMsgs.scrollHeight;
+                            }
+
+                             // vet denne vbrdiejn er altr for stor men når den er det blir den ialle fall satt til bunnen
+
+
+                            // chatMsgs.scrollTop = chatMsgs.scrollHeight;
+                            // chatMsgs.innerHTML += msgStruct;
+                }
+
+                // document.getElementById("sendingsbekreftelse").innerHTML = this.responseText; // her henter jeg ut verdi fra json objectet jeg fikk fra server
+              }
+            }
+            xmlUpdateFinder.send();
+          }
+        }, 3000);
+
+      }, 1000);
+
+
+
+
+
+
+// styling done in js:
+ // window.onload = function() { // IDEA TESTER UTEN DENNE DA DETTE KANSKJE KAN VÆRE ROT TIL PROBLEM
+
+  var sendBtn = document.getElementById('send-btn');
+
+  window.addEventListener("resize", posCng);  // kjører når winduet str endrer seg for å oppdatere styles i posCng som er avhengi av str
+   // var input = document.getElementById("msg-input");
+  function posCng(){
+    // console.log("goes like this!");
+    let vh = window.innerHeight/100;
+    let vw = window.innerWidth/100;
+
+
+    let bubble = document.getElementById("chat-bubble");
+    bubble.style.marginTop = ((100*vh) - (6*vw)) + "px";
+    document.getElementsByClassName("chat-wrap")[0].style.marginTop = ((100*vh) - (8*vw + 77*vh)) + "px";
+
+
+    let inputH = ((77*vh)*0.25)-40; //0.6 aka det siuste tall i regningen er prosent str av .chat-send  boksen
+    input.style.height = inputH + "px";
+
+    sendBtn.style.width = ((25*vw)*0.3) -(3*20)+ "px";
+    document.getElementById("toggle-wrap").style.width = ((25*vw)*0.3) -(3*20) + "px";
+    document.getElementById("toggle-wrap").style.marginTop = -((((77*vh)*0.25)*0.3) + 5) + "px";
+
+
+     // IDEA regn rett str ger comon u can do it mmotgher shu chahas
+    // input.style.paddingBottom = (inputH - 3*vh) + "px"; //padding her slik at den blir 0.6% av tingen
+    // console.log((((77*vh)*0.25) - inputH - 20));
+    // input.style.marginTop =  (((77*vh)*0.25) - inputH - 20) + "px";
+
+
+    // let wrapW = (25*vw);
+    // let inoutW = ((25*vw)*70);
+    // input.style.width = (((25*vw)*0.7)-33) + "px";
+
+    // få lagt inn samme padding som meldingsboksene her:
+  }
+  posCng();
+
+  // document.getElementById("msg-input").addEventListener("focus", function(){
+  //   let vh = window.innerHeight/100;
+  //   input.style.marginTop =  (((77*vh)*0.25) - 4 - (((77*vh)*0.25)-43) - 20) + "px";
+  // });
+  // document.getElementById("msg-input").addEventListener("focusout", function(){
+  //   let vh = window.innerHeight/100;
+  //   input.style.marginTop =  (((77*vh)*0.25) - 3 - (((77*vh)*0.25)-43) - 20) + "px";
+  // });
+  // window.onresize = positioning();
+
+  // window.onresize = function eple(){
+  //   console.log("we go now!");
+  // }
+
+
+
+
+setTimeout(getMsgs, 2000)
+
+
+   // var lastAdmin; // GJØR DENNE GLOBAL SLIK AT DEN SOM HENEER INN NYE MELDINGER OGSÅ VET OM DET ER ADMIN SIST ELLER IKKE SLIK AT DEN KAN STYLE RETT ETTER DET MED SAMME PRINTRMETODE SOM I DENNE
+  function getMsgs(){ // DENNE FUNKSJONEN HENTER MELDINGENE FRA DB DENNE FUNKSJONEN FUNGERER NÅ AKURATT SOM DEN SKAL
+     // console.log(chatBox.value);
+     // if (z) {
+     //   console.log("send email");
+     // }
+     // else {
+     //   console.log("don't send email");
+     // }
+     let xmlSend;
+     if (window.XMLHttpRequest) {
+        // code for modern browsers
+        xmlSend = new XMLHttpRequest();
+     }
+     else {
+        // code for old IE browsers
+        xmlSend = new ActiveXObject("Microsoft.XMLHTTP");
+     }
+     xmlSend.open("GET", "getmsgs.php", true);
+     xmlSend.onreadystatechange = function () {
+        if(this.readyState == 4 && this.status == 200){
+          let msgStruct = "";
+          let chatMsgs = document.getElementsByClassName("chat-messages")[0];
+          if (this.responseText == "") {
+            // console.log("nada");
+            botReply("Hey there!  I am bot bit I will gladly take any request of any sort and bring them forward to the bitbybit team! So feel free to ask I won't bite! Probbably.");
+            // console.log(msgStruct);
+          }else {
+          console.log("fudge");
+
+             // document.getElementById("sendingsbekreftelse").innerHTML += this.responseText;
+             let meld = JSON.parse(this.responseText); // her henter jeg inn jasjon fra servers echo
+            // IDEA denne fungerer så json over fungerer IDEA document.getElementById("sendingsbekreftelse").innerHTML = "meldID " + meld[1].name + "  message in this chat: " + meld[1].message;
+
+
+             // document.getElementById("sendingsbekreftelse").innerHTML = chatMsgs;
+
+             // IDEA dette er starten på utkomentert kod
+
+
+
+
+             for (var i = 0; i < meld.length; i++) {
+               // document.getElementById("sendingsbekreftelse").innerHTML += "<br><br>last admin er: " + lastAdmin;
+
+               if (meld[i].admin == 0) {
+
+                       // document.getElementById("sendingsbekreftelse").innerHTML += "brukar<br><br>";
+                       if (lastAdmin) {
+                         msgStruct += '</div><div class="user messages"><div class="message">' + meld[i].message + '</div>';
+                         lastAdmin = false; // trenger kun å settes her da om denne iokke kjørrer i denne if er den false fra før av
+                       }else if (lastAdmin == undefined) {
+                         msgStruct = '<div class="user messages"><div class="message">' + meld[i].message + '</div>';
+                         lastAdmin = false;
+                       }
+                       else {
+                         msgStruct += '<div class="message">' + meld[i].message + '</div>';
+                       }
+               }
+               else {
+                       if (lastAdmin) {
+                         msgStruct += '<div class="message">' + meld[i].message + '</div>';
+                       }
+                       else if (lastAdmin = undefined) {
+                         msgStruct += '<div class="admin messages"><div class="message">' + meld[i].message + '</div>';
+                         lastAdmin = true;
+                       }
+                       else {
+                         lastAdmin = true;
+                         msgStruct += '</div><div class="admin messages"><div class="message">' + meld[i].message + '</div>';
+                       }
+                       // IDEA DENNE METODEN KAN KUN BENYTTES FRA STARTEN AV SIDEN NÅR DEN PRINTES ETTER VARIABELEN ER BUGGD OPP LEGGE S DET TIL EN END TAG PÅ </DIV>  SLIK AT JEG IKKKE KAN FORTSETTE MED DENNE LOGIKKKEN ETTER LIVE UPDATE
+                       // document.getElementById("sendingsbekreftelse").innerHTML += "admin<br><br>";
+               }
+             }
+             }
+
+
+                    chatMsgs.innerHTML += msgStruct;
+                    chatMsgs.scrollTop = chatMsgs.scrollHeight;
+
+
+                                        // document.getElementById("sendingsbekreftelse").innerHTML += msgStruct;
+
+                    // IDEA denne skal slutte koments
+
+              // if (meld[]) {
+              //
+              // }
+            // chatMsgs.innerHTML += '<div class="admin messages"><div class="message">' + meld[0].message + '</div> <div class="message">' + meld[1].message +'</div></div>';
+
+
+       }
+     }
+      xmlSend.send();
+  }
+
+
+
+// }  // IDEA FJERNER DENNE ER AVSLUTTER TIL ONLOAD WRAPPER FUNCEN
+
+
+
+
+  var bubble = document.getElementById("chat-bubble");
+
+  bubble.addEventListener("click", chatStyle);
+
+var chatOpen = false;
+
+  function chatStyle() {
+    console.log("goes like this!");
+
+      let chat = document.getElementsByClassName("chat-wrap")[0];
+
+      if (chatOpen) {
+        console.log("true");
+        chat.style.display = "none";
+        chatOpen = false;
+      }
+      else {
+        console.log("false");
+        chat.style.display = "block";
+        chatOpen = true;
+      }
+
+
+  }
+
+
+     </script>
+  </body>
+</html>
